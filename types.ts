@@ -7,6 +7,11 @@ export enum Madhab {
   HANBALI = 'الحنبلي'
 }
 
+export enum Language {
+  AR = 'ar',
+  EN = 'en'
+}
+
 export interface Message {
   role: 'user' | 'assistant';
   content: string;

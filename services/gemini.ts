@@ -1,6 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_INSTRUCTION } from "../constants";
+import { Language } from "../types";
 
 export class GeminiService {
   private ai: GoogleGenAI;
@@ -9,10 +10,10 @@ export class GeminiService {
     this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   }
 
-  async sendMessage(message: string, history: { role: string; content: string }[], selectedMadhab: string) {
-    const promptWithContext = selectedMadhab !== 'غير محدد' 
+  async sendMessage(message: string, history: { role: string; content: string }[], selectedMadhab: string, lang: Language) {
+    const promptWithContext = `(Interface Language: ${lang})\n` + (selectedMadhab !== 'غير محدد' 
       ? `(المذهب المختار للمستخدم: المذهب ${selectedMadhab})\nالسؤال: ${message}`
-      : message;
+      : message);
 
     try {
       const response = await this.ai.models.generateContent({
@@ -33,7 +34,9 @@ export class GeminiService {
       return response.text || "عذراً، حدث خطأ في معالجة طلبك.";
     } catch (error) {
       console.error("Gemini API Error:", error);
-      return "عذراً، واجهنا مشكلة في الاتصال بالخدمة. يرجى المحاولة لاحقاً.";
+      return lang === Language.AR 
+        ? "عذراً، واجهنا مشكلة في الاتصال بالخدمة. يرجى المحاولة لاحقاً." 
+        : "Sorry, we encountered a problem connecting to the service. Please try again later.";
     }
   }
 }
