@@ -7,6 +7,9 @@ import { Message, Madhab, SavedIssue } from './types';
 import { GeminiService } from './services/gemini';
 
 const App: React.FC = () => {
+  // #region agent log
+  fetch('http://127.0.0.1:7244/ingest/3fcd50bc-238a-46d3-a424-7b7726ce0fc0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:mount',message:'App component mounted',data:{},timestamp:Date.now(),hypothesisId:'D'})}).catch(()=>{});
+  // #endregion
   const [showLanding, setShowLanding] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -165,6 +168,9 @@ const App: React.FC = () => {
   };
 
   if (showLanding) {
+    // #region agent log
+    fetch('http://127.0.0.1:7244/ingest/3fcd50bc-238a-46d3-a424-7b7726ce0fc0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:branch',message:'rendering LandingPage',data:{showLanding:true},timestamp:Date.now(),hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
     return <LandingPage onStart={() => setShowLanding(false)} />;
   }
 
